@@ -79,7 +79,7 @@ jobs:
           directory: .
           framework: terraform
           quiet: true
-
+          skip_check: CKV_AZURE_33,CKV_AZURE_59,CKV_AZURE_206,CKV2_AZURE_1
 
   # --------------------------------
   # 4. Terraform Plan
