@@ -150,24 +150,13 @@ jobs:
   # 5. Terraform Apply
   # --------------------------------
   apply:
-    name: Terraform Apply
+    name: Terraform Apply - Production
     runs-on: ubuntu-latest
-
-    # Apply only after merge/push to main
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-
     needs:
       - plan
-
-    # GitHub Environment should have required reviewer approval
     environment:
       name: production
-
-    strategy:
-      matrix:
-        environment:
-          - dev
-          - prod
 
     steps:
       - name: Checkout
@@ -184,12 +173,12 @@ jobs:
           subscription-id: ${{ vars.AZURE_SUBSCRIPTION_ID }}
 
       - name: Terraform Init
-        working-directory: environments/${{ matrix.environment }}
+        working-directory: environments/prod
         run: terraform init
 
       - name: Terraform Apply
-        working-directory: environments/${{ matrix.environment }}
+        working-directory: environments/prod
         run: |
           terraform apply \
             -auto-approve \
-            -var-file=${{ matrix.environment }}.tfvars
+            -var-file=prod.tfvars
